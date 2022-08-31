@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/belajar_github/static/css/main.1e55915d.css",
-    "main.js": "/belajar_github/static/js/main.eeeecc71.js",
+    "main.css": "/belajar_github/static/css/main.112bface.css",
+    "main.js": "/belajar_github/static/js/main.3a167010.js",
     "static/js/787.fb0062f2.chunk.js": "/belajar_github/static/js/787.fb0062f2.chunk.js",
     "index.html": "/belajar_github/index.html",
-    "main.1e55915d.css.map": "/belajar_github/static/css/main.1e55915d.css.map",
-    "main.eeeecc71.js.map": "/belajar_github/static/js/main.eeeecc71.js.map",
+    "main.112bface.css.map": "/belajar_github/static/css/main.112bface.css.map",
+    "main.3a167010.js.map": "/belajar_github/static/js/main.3a167010.js.map",
     "787.fb0062f2.chunk.js.map": "/belajar_github/static/js/787.fb0062f2.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.1e55915d.css",
-    "static/js/main.eeeecc71.js"
+    "static/css/main.112bface.css",
+    "static/js/main.3a167010.js"
   ]
 }
