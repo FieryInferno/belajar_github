@@ -1,7 +1,9 @@
-/* eslint-disable max-len */
 import React, {useState, useEffect} from 'react';
-import axios from 'axios';
+import {Route, Routes, Link, Navigate} from 'react-router-dom';
+import Today from './pages/Today';
+import Day from './pages/Day';
 import moment from 'moment';
+import axios from 'axios';
 import {stringify} from 'query-string';
 
 const App = () => {
@@ -11,8 +13,6 @@ const App = () => {
   const [weathers, setWeathers] = useState();
   const today = moment().format('YYYY-MM-DD');
   const [todayForecast, setTodayForecast] = useState();
-
-  console.log(todayForecast);
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition((position) => {
@@ -26,15 +26,18 @@ const App = () => {
       const params = {
         lat,
         lon,
-        lang: 'id',
         units: 'metric',
         appid: process.env.REACT_APP_API_KEY,
       };
 
-      await axios.get(`${process.env.REACT_APP_API_URL}/weather?${stringify(params)}`)
+      await axios.get(
+          `${process.env.REACT_APP_API_URL}/weather?${stringify(params)}`,
+      )
           .then((response) => setWeather(response.data));
 
-      await axios.get(`${process.env.REACT_APP_API_URL}/forecast?${stringify(params)}`)
+      await axios.get(
+          `${process.env.REACT_APP_API_URL}/forecast?${stringify(params)}`,
+      )
           .then((response) => setWeathers(response.data));
     };
 
@@ -46,19 +49,31 @@ const App = () => {
   useEffect(() => {
     if (weathers !== undefined) {
       const Morning = weathers?.list.filter((weather) => {
-        return (weather.dt >= Math.floor(new Date(today + ' 06:00') / 1000) && weather.dt <= Math.floor(new Date(today + ' 12:00') / 1000));
+        return (
+          weather.dt >= Math.floor(new Date(today + ' 06:00') / 1000) &&
+          weather.dt <= Math.floor(new Date(today + ' 12:00') / 1000)
+        );
       });
 
       const Afternoon = weathers?.list.filter((weather) => {
-        return (weather.dt >= Math.floor(new Date(today + ' 12:00') / 1000) && weather.dt <= Math.floor(new Date(today + ' 16:59') / 1000));
+        return (
+          weather.dt >= Math.floor(new Date(today + ' 12:00') / 1000) &&
+          weather.dt <= Math.floor(new Date(today + ' 16:59') / 1000)
+        );
       });
 
       const Evening = weathers?.list.filter((weather) => {
-        return (weather.dt >= Math.floor(new Date(today + ' 17:00') / 1000) && weather.dt <= Math.floor(new Date(today + ' 21:00') / 1000));
+        return (
+          weather.dt >= Math.floor(new Date(today + ' 17:00') / 1000) &&
+          weather.dt <= Math.floor(new Date(today + ' 21:00') / 1000)
+        );
       });
 
       const Night = weathers?.list.filter((weather) => {
-        return (weather.dt >= Math.floor(new Date(today + ' 21:00') / 1000) && weather.dt <= Math.floor(new Date(today + ' 23:59') / 1000));
+        return (
+          weather.dt >= Math.floor(new Date(today + ' 21:00') / 1000) &&
+          weather.dt <= Math.floor(new Date(today + ' 23:59') / 1000)
+        );
       });
 
       setTodayForecast({
@@ -70,6 +85,9 @@ const App = () => {
     }
   }, [weathers]);
 
+  const props = {weather, todayForecast, weathers};
+
+  /* eslint-disable max-len */
   return (
     <>
       <nav className="bg-white border-gray-200 px-2 sm:px-4 py-2.5 rounded dark:bg-gray-900">
@@ -103,63 +121,21 @@ const App = () => {
             </div>
             <ul className="flex flex-col p-4 mt-4 bg-gray-50 rounded-lg border border-gray-100 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
               <li>
-                <a href="dashboard" className="block py-2 pr-4 pl-3 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-white dark:bg-blue-600 md:dark:bg-transparent" aria-current="page">Today</a>
+                <Link to="today" className="block py-2 pr-4 pl-3 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-white dark:bg-blue-600 md:dark:bg-transparent">Today</Link>
               </li>
               <li>
-                <a href="dashboard" className="block py-2 pr-4 pl-3 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Hourly</a>
-              </li>
-              <li>
-                <a href="dashboard" className="block py-2 pr-4 pl-3 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">5 Day</a>
+                <Link to="day" className="block py-2 pr-4 pl-3 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">5 Day</Link>
               </li>
             </ul>
           </div>
         </div>
       </nav>
-      <div className="flex justify-center mt-4">
-        <div className="grid grid-rows-2 grid-flow-col gap-4">
-          <div>
-            <div className="block p-6 max-w-4xl bg-white rounded-lg border border-gray-200 shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
-              <div className="flex flex-row">
-                <div className="basis-3/4">
-                  <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{weather?.name}, Indonesian Weather</h5>
-                  <p className="font-normal text-gray-700 dark:text-gray-400">as of {moment().format('hh:mm a')}</p>
-                  <h1 className="mb-4 text-4xl font-extrabold tracking-tight leading-none text-gray-900 md:text-5xl lg:text-6xl dark:text-white">{weather?.main.temp}°</h1>
-                  <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{weather?.weather[0].main}</h5>
-                </div>
-                <div className="basis-1/4 p-16">
-                  <img src={`http://openweathermap.org/img/wn/${weather?.weather[0].icon}@2x.png`} />
-                  <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{weather?.main.temp_min}/{weather?.main.temp_max}°</h5>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div>
-            <div className="block p-6 max-w-4xl bg-white rounded-lg border border-gray-200 shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
-              <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Today&apos;s Forecast for {weather?.name}, Indonesian Weather</h5>
-              <div className="grid grid-cols-4 gap-4">
-                {todayForecast && Object.values(todayForecast).map((forecast, key) => {
-                  return forecast.length > 0 && (
-                    <div>
-                      <div className="flex justify-center">
-                        <h5 className="text-lg font-bold tracking-tight text-gray-900 dark:text-white">{Object.keys(todayForecast)[key]}</h5>
-                      </div>
-                      <div className="flex justify-center">
-                        <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{forecast[0].main.temp}°</h5>
-                      </div>
-                      <div className="flex justify-center">
-                        <img src={`http://openweathermap.org/img/wn/${forecast[0].weather[0].icon}@2x.png`} />
-                      </div>
-                      <div className="flex justify-center">
-                        <h5 className="text-md tracking-tight text-gray-900 dark:text-white">{forecast[0].clouds.all}%</h5>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <Routes>
+        <Route path="/" element={<Today {...props} />} />
+        <Route path="/today" element={<Today {...props} />} />
+        <Route path="/day" element={<Day {...props} />} />
+        <Route path="*" element={<Navigate to ="/" />}/>
+      </Routes>
     </>
   );
 };
